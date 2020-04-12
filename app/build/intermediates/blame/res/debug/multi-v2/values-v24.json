@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/jabousk/Developments/Raywonderlich/Advanced_Android_App_Architecture_v1.0/12-mvvm-sample-aac/final/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v24/values-v24.xml",
+            "map": [
+                {
+                    "source": "/Users/jabousk/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/e5989be179356e288b89155fb5858e2d/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                }
+            ]
+        }
+    ]
+}
