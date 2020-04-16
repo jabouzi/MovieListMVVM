@@ -30,6 +30,7 @@
 
 package com.raywenderlich.wewatch.data.net
 
+import com.raywenderlich.wewatch.BuildConfig
 import com.raywenderlich.wewatch.data.model.MoviesResponse
 import com.raywenderlich.wewatch.data.model.details.MovieDetails
 import okhttp3.OkHttpClient
@@ -43,7 +44,7 @@ class RetrofitClient {
   private val moviesApi: MoviesApi
 
   companion object {
-    private const val API_KEY = "3e72efb4de56992e6d87d8161b797802"
+    private const val API_KEY = BuildConfig.API_KEY
     private const val TMDB_BASE_URL = "http://api.themoviedb.org/3/"
     const val TMDB_IMAGEURL = "https://image.tmdb.org/t/p/w500/"
   }
