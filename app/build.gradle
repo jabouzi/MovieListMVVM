@@ -6,6 +6,13 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+def getTmdbApiKey(){
+    if(System.getenv('TMDB_API_KEY') == null){
+        return '"N/A"'
+    }
+    return System.getenv('TMDB_API_KEY');
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -35,6 +42,13 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+
+    buildTypes {
+        debug {
+            buildConfigField 'String', 'API_KEY', "${getTmdbApiKey()}"
+        }
     }
 }
 
