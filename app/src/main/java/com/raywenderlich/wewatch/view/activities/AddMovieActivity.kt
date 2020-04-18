@@ -35,10 +35,8 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
-import com.raywenderlich.wewatch.R
-import com.raywenderlich.wewatch.action
+import com.raywenderlich.wewatch.*
 import com.raywenderlich.wewatch.data.model.Movie
-import com.raywenderlich.wewatch.snack
 import com.raywenderlich.wewatch.viewmodel.AddViewModel
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
@@ -65,7 +63,7 @@ class AddMovieActivity : BaseActivity() {
     setSupportActionBar(toolbar)
     getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
     getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-    viewModel = ViewModelProviders.of(this).get(AddViewModel::class.java)
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddViewModel::class.java)
 
   }
 

@@ -11,13 +11,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.data.model.details.MovieDetails
 import com.raywenderlich.wewatch.data.net.RetrofitClient
+import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.MovieViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.progressBar
-import kotlinx.android.synthetic.main.content_movie_details.*
-import kotlinx.android.synthetic.main.item_movie_main.view.*
-import kotlinx.android.synthetic.main.item_movie_main.view.movieImageView
+import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -34,7 +32,7 @@ class MovieDetailsActivity : BaseActivity() {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()?.setDisplayShowHomeEnabled(true);
         val movieId = intent.extras.getInt("id")
-        viewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
         showLoading()
         viewModel.getMovie(movieId).observe(this, Observer { movie ->
             hideLoading()

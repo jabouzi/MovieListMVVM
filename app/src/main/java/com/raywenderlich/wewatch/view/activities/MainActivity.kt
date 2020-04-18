@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.listener.MovieClickListener
 import com.raywenderlich.wewatch.view.adapters.MovieListAdapter
+import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
@@ -57,7 +58,7 @@ class MainActivity : BaseActivity(), MovieClickListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
     moviesRecyclerView.adapter = adapter
     showLoading()
     viewModel.getSavedMovies().observe(this, Observer { movies ->

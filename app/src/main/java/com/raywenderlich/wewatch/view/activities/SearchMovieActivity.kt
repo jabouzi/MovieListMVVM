@@ -41,6 +41,7 @@ import com.raywenderlich.wewatch.action
 import com.raywenderlich.wewatch.data.model.Movie
 import com.raywenderlich.wewatch.snack
 import com.raywenderlich.wewatch.view.adapters.SearchListAdapter
+import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
@@ -66,7 +67,7 @@ class SearchMovieActivity : BaseActivity() {
     intent?.extras?.getString("title")?.let {
       title = it
     }
-    viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
     searchRecyclerView.adapter = adapter
     searchMovie()
   }
