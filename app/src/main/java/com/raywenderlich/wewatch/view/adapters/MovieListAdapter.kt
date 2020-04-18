@@ -47,7 +47,6 @@ class MovieListAdapter(private val movies: MutableList<Movie>, private val itemC
   : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
 
   val selectedMovies = HashSet<Movie>()
-  private lateinit var clickListener: MovieClickListener
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
     val view = LayoutInflater.from(parent.context)
@@ -64,10 +63,8 @@ class MovieListAdapter(private val movies: MutableList<Movie>, private val itemC
   fun setMovies(movieList: List<Movie>) {
     this.movies.clear()
     this.movies.addAll(movieList)
-    notifyDataSetChanged()
+      notifyDataSetChanged()
   }
-
-
 
   inner class MovieHolder(val view: View) : RecyclerView.ViewHolder(view) {
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/movieListFragment">
+
+    <fragment
+        android:id="@+id/movieListFragment"
+        android:name="com.raywenderlich.wewatch.view.ui.MovieListFragment"
+        android:label="Movie List" >
+        <action
+            android:id="@+id/action_movieListFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_movieListFragment_to_addMovieFragment"
+            app:destination="@id/addMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.raywenderlich.wewatch.view.ui.MovieDetailsFragment"
+        android:label="Movie Details" />
+    <fragment
+        android:id="@+id/addMovieFragment"
+        android:name="com.raywenderlich.wewatch.view.ui.AddMovieFragment"
+        android:label="Add Movie"
+        tools:layout="@layout/fragment_movie_add" >
+        <action
+            android:id="@+id/action_addMovieFragment_to_searchMovieFragment"
+            app:destination="@id/searchMovieFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/searchMovieFragment"
+        android:name="com.raywenderlich.wewatch.view.ui.SearchMovieFragment"
+        android:label="Search Movie"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchMovieFragment_to_movieListFragment"
+            app:destination="@id/movieListFragment"/>
+    </fragment>
+</navigation>
