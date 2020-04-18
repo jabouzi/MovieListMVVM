@@ -7,6 +7,13 @@
   android:id="@+id/addLayout"
   tools:context=".view.ui.AddMovieFragment">
 
+  <include
+    android:id="@+id/toolbar_view"
+    layout="@layout/toolbar_view_custom_layout"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
   <EditText
     android:id="@+id/titleEditText"
     android:layout_width="0dp"

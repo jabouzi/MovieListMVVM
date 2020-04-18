@@ -3,10 +3,14 @@ package com.raywenderlich.wewatch.view.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.listener.MovieClickListener
@@ -29,6 +33,12 @@ class MovieListFragment : Fragment(), MovieClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+                .setupWithNavController(navController, appBarConfiguration)
 
         adapter = MovieListAdapter(mutableListOf(), this)
         moviesRecyclerView.adapter = adapter

@@ -34,11 +34,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.action
@@ -48,6 +52,7 @@ import com.raywenderlich.wewatch.view.adapters.SearchListAdapter
 import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 class SearchMovieFragment : Fragment() {
 
@@ -63,9 +68,17 @@ class SearchMovieFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    val navController = findNavController()
+    val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+    view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+            .setupWithNavController(navController, appBarConfiguration)
+
     val searchText = arguments?.getString("title")
     searchText?.let {
       title = it
+      toolbar_toolbar_view.title = title
     }
     adapter = SearchListAdapter(mutableListOf()) { movie -> displayConfirmation(movie) }
     searchRecyclerView.adapter = adapter

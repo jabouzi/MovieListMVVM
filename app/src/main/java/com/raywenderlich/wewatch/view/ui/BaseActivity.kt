@@ -31,15 +31,16 @@
 package com.raywenderlich.wewatch.view.ui
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 abstract class BaseActivity : AppCompatActivity() {
 
   override fun onResume() {
     super.onResume()
-//    this.getToolbarInstance()?.let { this.initView(it) }
+    this.getToolbarInstance()?.let { this.initView(it) }
   }
 
-//  private fun initView(toolbar: Toolbar) = setSupportActionBar(toolbar)
+  private fun initView(toolbar: Toolbar) = setSupportActionBar(toolbar)
 
-//  abstract fun getToolbarInstance(): Toolbar?
+  abstract fun getToolbarInstance(): Toolbar?
 }

@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="com.raywenderlich.wewatch.view.ui.MovieDetailsFragment"
-        android:label="Movie Details" />
+        android:label="" />
     <fragment
         android:id="@+id/addMovieFragment"
         android:name="com.raywenderlich.wewatch.view.ui.AddMovieFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/searchMovieFragment"
         android:name="com.raywenderlich.wewatch.view.ui.SearchMovieFragment"
-        android:label="Search Movie"
+        android:label=""
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchMovieFragment_to_movieListFragment"

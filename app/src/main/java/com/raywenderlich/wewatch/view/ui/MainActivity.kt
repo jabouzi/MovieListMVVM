@@ -32,15 +32,16 @@ package com.raywenderlich.wewatch.view.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.raywenderlich.wewatch.R
+import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 
 class MainActivity : AppCompatActivity(){
 
-//  private val toolbar: Toolbar by lazy { toolbar_toolbar_view as Toolbar }
   private lateinit var navigationController: NavController
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +49,13 @@ class MainActivity : AppCompatActivity(){
     setContentView(R.layout.activity_main)
 
     navigationController = findNavController(R.id.navigationHostFragment)
-    NavigationUI.setupActionBarWithNavController(this, navigationController)
+//    NavigationUI.setupActionBarWithNavController(this, navigationController)
 
   }
+
+//  override fun getToolbarInstance(): Toolbar? {
+//    TODO("Not yet implemented")
+//  }
 
   override fun onSupportNavigateUp() = navigationController.navigateUp()
 
