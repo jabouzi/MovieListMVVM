@@ -11,22 +11,34 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.raywenderlich.wewatch.App
 
 import com.raywenderlich.wewatch.R
+import com.raywenderlich.wewatch.di.modules.MovieListAdapterModule
 import com.raywenderlich.wewatch.listener.MovieClickListener
 import com.raywenderlich.wewatch.view.adapters.MovieListAdapter
-import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.MainViewModel
+import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import org.jetbrains.anko.toast
+import javax.inject.Inject
 
 class MovieListFragment : Fragment(), MovieClickListener {
 
-    private lateinit var adapter: MovieListAdapter
-    private lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var adapter: MovieListAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        App.INSTANCE.appComponent.getMovieListFragmentComponent().inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
@@ -40,7 +52,13 @@ class MovieListFragment : Fragment(), MovieClickListener {
         view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
                 .setupWithNavController(navController, appBarConfiguration)
 
-        adapter = MovieListAdapter(mutableListOf(), this)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+        toolbar.inflateMenu(R.menu.main_menu)
+        toolbar.setOnMenuItemClickListener {
+            onOptionsItemSelected(it)
+        }
+
+        adapter = MovieListAdapter(this)
         moviesRecyclerView.adapter = adapter
         showLoading()
         viewModel.getSavedMovies().observe(this, Observer { movies ->
@@ -73,17 +91,12 @@ class MovieListFragment : Fragment(), MovieClickListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.main_menu, menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delete -> this.deleteMoviesClicked()
             else -> activity?.toast(getString(R.string.error))
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onItemClick(movieId: Int) {

@@ -12,22 +12,27 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.raywenderlich.wewatch.App
+import com.raywenderlich.wewatch.BuildConfig
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.data.model.details.MovieDetails
-import com.raywenderlich.wewatch.data.net.RetrofitClient
-import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.MovieViewModel
+import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
+import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
+        App.INSTANCE.appComponent.getMovieDetailsFragmentComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[MovieViewModel::class.java]
         return inflater.inflate(R.layout.fragment_movie_details, container, false)
     }
 
@@ -64,7 +69,7 @@ class MovieDetailsFragment : Fragment() {
     private fun showMovieDetails(movieDetails: MovieDetails) {
         movieDetails?.let {
             if (it.posterPath != null)
-                Picasso.get().load(RetrofitClient.TMDB_IMAGEURL + it.posterPath).into(movieImageView)
+                Picasso.get().load(BuildConfig.TMDB_IMAGEURL + it.posterPath).into(movieImageView)
             else {
                 movieImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_local_movies_gray, null))
             }

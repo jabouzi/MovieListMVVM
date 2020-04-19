@@ -31,17 +31,19 @@
 package com.raywenderlich.wewatch
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import com.raywenderlich.wewatch.data.db.MovieDatabase
-import com.raywenderlich.wewatch.viewmodel.WeWatchViewModelFactory
-
-lateinit var db: MovieDatabase
-lateinit var viewModelFactory: WeWatchViewModelFactory
+import com.raywenderlich.wewatch.di.components.AppComponent
+import com.raywenderlich.wewatch.di.components.DaggerAppComponent
 
 class App : Application() {
 
-  companion object {
-    lateinit var INSTANCE: App
+  lateinit var db: MovieDatabase
+  val appComponent: AppComponent by lazy { initDagger() }
+
+  private fun initDagger(): AppComponent {
+    val component = DaggerAppComponent.builder()
+            .build()
+    return component
   }
 
   init {
@@ -52,6 +54,10 @@ class App : Application() {
     super.onCreate()
     db = MovieDatabase.getInstance(this)
     INSTANCE = this
-    viewModelFactory = WeWatchViewModelFactory()
   }
+
+  companion object {
+    lateinit var INSTANCE: App
+  }
+
 }

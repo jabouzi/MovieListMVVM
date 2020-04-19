@@ -45,15 +45,19 @@ import com.google.android.material.snackbar.Snackbar
 import com.raywenderlich.wewatch.*
 import com.raywenderlich.wewatch.data.model.Movie
 import com.raywenderlich.wewatch.viewmodel.AddViewModel
+import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie_add.*
+import javax.inject.Inject
 
 class AddMovieFragment : Fragment() {
 
   private lateinit var viewModel: AddViewModel
+  @Inject
+  lateinit var viewModelFactory: ViewModelFactory
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-
+    App.INSTANCE.appComponent.getAddMovieFragmentComponent().inject(this)
     viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddViewModel::class.java)
     return inflater.inflate(R.layout.fragment_movie_add, container, false)
   }
@@ -97,7 +101,6 @@ class AddMovieFragment : Fragment() {
   fun addMovieClicked(view: View) {
     if (titleEditText.text.toString().isNotBlank()) {
       viewModel.saveMovie(Movie(title = titleEditText.text.toString(), releaseDate = yearEditText.text.toString()))
-//      finish()
     } else {
       showMessage(getString(R.string.enter_title))
     }

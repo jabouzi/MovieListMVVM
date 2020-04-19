@@ -35,18 +35,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.raywenderlich.wewatch.BuildConfig
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.data.model.Movie
-import com.raywenderlich.wewatch.data.net.RetrofitClient
 import com.raywenderlich.wewatch.listener.MovieClickListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_main.view.*
 import java.util.*
+import javax.inject.Inject
 
-class MovieListAdapter(private val movies: MutableList<Movie>, private val itemClickListener: MovieClickListener)
+class MovieListAdapter @Inject constructor(private val itemClickListener: MovieClickListener)
   : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
 
   val selectedMovies = HashSet<Movie>()
+  private val movies = mutableListOf<Movie>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
     val view = LayoutInflater.from(parent.context)
@@ -73,7 +75,7 @@ class MovieListAdapter(private val movies: MutableList<Movie>, private val itemC
       movieReleaseDateTextView.text = movie.releaseDate
       checkbox.isChecked = movie.watched
       if (movie.posterPath != null)
-        Picasso.get().load(RetrofitClient.TMDB_IMAGEURL + movie.posterPath).into(movieImageView)
+        Picasso.get().load(BuildConfig.TMDB_IMAGEURL + movie.posterPath).into(movieImageView)
       else {
         movieImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_local_movies_gray, null))
       }

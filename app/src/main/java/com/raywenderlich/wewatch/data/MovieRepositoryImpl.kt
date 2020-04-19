@@ -33,30 +33,32 @@ package com.raywenderlich.wewatch.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.raywenderlich.wewatch.App
 import com.raywenderlich.wewatch.data.db.MovieDao
 import com.raywenderlich.wewatch.data.model.Movie
 import com.raywenderlich.wewatch.data.model.MoviesResponse
 import com.raywenderlich.wewatch.data.model.details.MovieDetails
 import com.raywenderlich.wewatch.data.net.RetrofitClient
-import com.raywenderlich.wewatch.db
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 import kotlin.concurrent.thread
 
-class MovieRepositoryImpl : MovieRepository {
+class MovieRepositoryImpl @Inject constructor() : MovieRepository {
 
-  private val movieDao: MovieDao = db.movieDao()
-  private val retrofitClient = RetrofitClient()
+  @Inject lateinit var retrofitClient: RetrofitClient
+  private val movieDao: MovieDao = App.INSTANCE.db.movieDao()
   private val allMovies: LiveData<List<Movie>>
 
   init {
     allMovies = movieDao.getAll()
+    retrofitClient = App.INSTANCE.appComponent.getRetrofitClient()
   }
 
   override fun deleteMovie(movie: Movie) {
     thread {
-      db.movieDao().delete(movie.id)
+      App.INSTANCE.db.movieDao().delete(movie.id)
     }
   }
 
@@ -64,7 +66,6 @@ class MovieRepositoryImpl : MovieRepository {
 
   override fun getMovieDetails(movieId: Int): LiveData<MovieDetails?> {
     val data = MutableLiveData<MovieDetails>()
-
     retrofitClient.getMovie(movieId).enqueue(object : Callback<MovieDetails> {
       override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
         data.value = null

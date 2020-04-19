@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.raywenderlich.wewatch.data.MovieRepository
 import com.raywenderlich.wewatch.data.MovieRepositoryImpl
 import com.raywenderlich.wewatch.data.model.details.MovieDetails
+import javax.inject.Inject
 
-class MovieViewModel(private val repository: MovieRepository = MovieRepositoryImpl()): ViewModel()  {
+class MovieViewModel @Inject constructor(val repository: MovieRepository): ViewModel()  {
 
     fun getMovie(movieId: Int): LiveData<MovieDetails?>{
         return repository.getMovieDetails(movieId)

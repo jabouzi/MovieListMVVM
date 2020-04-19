@@ -1,13 +1,10 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
-def getTmdbApiKey(){
-    if(System.getenv('TMDB_API_KEY') == null){
+def getTmdbApiKey() {
+    if (System.getenv('TMDB_API_KEY') == null) {
         return '"N/A"'
     }
     return System.getenv('TMDB_API_KEY');
@@ -47,7 +44,9 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField 'String', 'API_KEY', "${getTmdbApiKey()}"
+            buildConfigField 'String', 'API_KEY', "\"${getTmdbApiKey()}\""
+            buildConfigField 'String', 'TMDB_BASE_URL',  '"http://api.themoviedb.org/3/"'
+            buildConfigField 'String', 'TMDB_IMAGEURL',  '"https://image.tmdb.org/t/p/w500/"'
         }
     }
 }
@@ -59,6 +58,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
 
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
@@ -101,4 +101,8 @@ dependencies {
     def lifecycle_version = '2.0.0-rc01'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+
+    def dagger_version = '2.27'
+    api "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

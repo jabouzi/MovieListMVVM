@@ -44,24 +44,29 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
-import com.raywenderlich.wewatch.R
-import com.raywenderlich.wewatch.action
+import com.raywenderlich.wewatch.*
 import com.raywenderlich.wewatch.data.model.Movie
-import com.raywenderlich.wewatch.snack
+import com.raywenderlich.wewatch.listener.SearchClickListener
 import com.raywenderlich.wewatch.view.adapters.SearchListAdapter
-import com.raywenderlich.wewatch.viewModelFactory
 import com.raywenderlich.wewatch.viewmodel.SearchViewModel
+import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
+import javax.inject.Inject
 
-class SearchMovieFragment : Fragment() {
+class SearchMovieFragment : Fragment(), SearchClickListener {
 
-  private lateinit var adapter: SearchListAdapter
+
   private lateinit var viewModel: SearchViewModel
   private lateinit var title: String
+  @Inject
+  lateinit var adapter: SearchListAdapter
+  @Inject
+  lateinit var viewModelFactory: ViewModelFactory
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
+    App.INSTANCE.appComponent.getSearchMovieFragmentComponent().inject(this)
     viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
     return inflater.inflate(R.layout.fragment_search, container, false)
   }
@@ -80,7 +85,7 @@ class SearchMovieFragment : Fragment() {
       title = it
       toolbar_toolbar_view.title = title
     }
-    adapter = SearchListAdapter(mutableListOf()) { movie -> displayConfirmation(movie) }
+    adapter = SearchListAdapter(this)
     searchRecyclerView.adapter = adapter
     searchMovie()
   }
@@ -125,5 +130,9 @@ class SearchMovieFragment : Fragment() {
           adapter.setMovies(movies)
       }
     })
+  }
+
+  override fun onItemClick(movie: Movie) {
+    displayConfirmation(movie)
   }
 }

@@ -1,7 +1,7 @@
-package com.pokemon.di.scope
+package com.raywenderlich.wewatch.di.scope
 
 import javax.inject.Scope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class FragmentScope
+annotation class AppScope

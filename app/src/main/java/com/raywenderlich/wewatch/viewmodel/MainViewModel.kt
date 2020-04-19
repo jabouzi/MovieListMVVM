@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.raywenderlich.wewatch.data.MovieRepository
 import com.raywenderlich.wewatch.data.MovieRepositoryImpl
 import com.raywenderlich.wewatch.data.model.Movie
+import javax.inject.Inject
 
-class MainViewModel(private val repository: MovieRepository = MovieRepositoryImpl()) : ViewModel() {
+class MainViewModel @Inject constructor(val repository: MovieRepository) : ViewModel() {
 
   private val allMovies = MediatorLiveData<List<Movie>>()
 

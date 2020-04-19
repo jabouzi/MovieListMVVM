@@ -35,14 +35,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.raywenderlich.wewatch.BuildConfig
 import com.raywenderlich.wewatch.R
 import com.raywenderlich.wewatch.data.model.Movie
-import com.raywenderlich.wewatch.data.net.RetrofitClient
+import com.raywenderlich.wewatch.listener.MovieClickListener
+import com.raywenderlich.wewatch.listener.SearchClickListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_search.view.*
+import javax.inject.Inject
 
-class SearchListAdapter(private val movies: MutableList<Movie>,
-                        private var listener: (Movie) -> Unit) : RecyclerView.Adapter<SearchListAdapter.MovieHolder>() {
+class SearchListAdapter @Inject constructor(private val itemClickListener: SearchClickListener) :
+        RecyclerView.Adapter<SearchListAdapter.MovieHolder>() {
+
+  private val movies = mutableListOf<Movie>()
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
     val view = LayoutInflater.from(parent.context)
         .inflate(R.layout.item_movie_search, parent, false)
@@ -52,7 +58,7 @@ class SearchListAdapter(private val movies: MutableList<Movie>,
   override fun getItemCount(): Int = movies.size ?: 0
 
   override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-      holder.bind(movies[position], position)
+      holder.bind(movies[position], position, itemClickListener)
   }
 
   fun setMovies(movieList: List<Movie>) {
@@ -63,12 +69,14 @@ class SearchListAdapter(private val movies: MutableList<Movie>,
 
 
   inner class MovieHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(movie: Movie, position: Int) = with(view) {
+    fun bind(movie: Movie, position: Int, itemClickListener: SearchClickListener) = with(view) {
       searchTitleTextView.text = movie.title
       searchReleaseDateTextView.text = movie.releaseDate
-      view.setOnClickListener { listener(movies?.get(position)) }
+      itemView.setOnClickListener {
+        movies?.get(position).let { it -> itemClickListener.onItemClick(it) }
+      }
       if (movie.posterPath != null)
-        Picasso.get().load(RetrofitClient.TMDB_IMAGEURL + movie.posterPath).into(searchImageView)
+        Picasso.get().load(BuildConfig.TMDB_IMAGEURL + movie.posterPath).into(searchImageView)
       else {
         searchImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_local_movies_gray, null))
       }
