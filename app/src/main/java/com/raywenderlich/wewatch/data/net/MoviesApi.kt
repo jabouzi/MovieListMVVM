@@ -40,11 +40,11 @@ import retrofit2.http.Query
 interface MoviesApi {
 
   @GET("discover/movie")
-  fun getMovies(@Query("api_key") api_key: String): Call<MoviesResponse>
+  suspend fun getMovies(@Query("api_key") api_key: String): MoviesResponse
 
   @GET("search/movie")
-  fun searchMovie(@Query("api_key") api_key: String, @Query("query") q: String): Call<MoviesResponse>
+  suspend fun searchMovie(@Query("api_key") api_key: String, @Query("query") q: String): MoviesResponse
 
   @GET("movie/{movie_id}")
-  fun getMovie(@Path("movie_id") movieId: Int, @Query("api_key") api_key: String): Call<MovieDetails>
+  suspend fun getMovie(@Path("movie_id") movieId: Int, @Query("api_key") api_key: String): MovieDetails
 }

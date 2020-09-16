@@ -42,20 +42,26 @@ class MovieDetailsFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
+        observeMovie()
+
         view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
                 .setupWithNavController(navController, appBarConfiguration)
 
         val movieId = arguments?.getInt("movieId")
         movieId?.let {
             showLoading()
-            viewModel.getMovie(it).observe(this, Observer { movie ->
-                hideLoading()
-                movie?.let {
-                    toolbar_toolbar_view.title = movie.title
-                    showMovieDetails(movie)
-                }
-            })
+            viewModel.getMovie(it)
         }
+    }
+
+    private fun observeMovie() {
+        viewModel.movie.observe(viewLifecycleOwner, Observer { movie ->
+            hideLoading()
+            movie?.let {
+                toolbar_toolbar_view.title = movie.title
+                showMovieDetails(movie)
+            }
+        })
     }
 
     private fun showLoading() {

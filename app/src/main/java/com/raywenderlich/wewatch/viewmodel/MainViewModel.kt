@@ -2,9 +2,13 @@ package com.raywenderlich.wewatch.viewmodel
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.raywenderlich.wewatch.data.MovieRepository
 import com.raywenderlich.wewatch.data.MovieRepositoryImpl
 import com.raywenderlich.wewatch.data.model.Movie
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(val repository: MovieRepository) : ViewModel() {
@@ -18,12 +22,20 @@ class MainViewModel @Inject constructor(val repository: MovieRepository) : ViewM
   fun getSavedMovies() = allMovies
 
   private fun getAllMovies() {
-    allMovies.addSource(repository.getSavedMovies()) { movies ->
-      allMovies.postValue(movies)
+    viewModelScope.launch {
+      withContext(Dispatchers.IO) {
+        allMovies.addSource(repository.getSavedMovies()) { movies ->
+          allMovies.postValue(movies)
+        }
+      }
     }
   }
 
   fun deleteSavedMovies(movie: Movie) {
-    repository.deleteMovie(movie)
+    viewModelScope.launch {
+      withContext(Dispatchers.IO) {
+        repository.deleteMovie(movie)
+      }
+    }
   }
 }

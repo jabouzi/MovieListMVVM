@@ -49,11 +49,11 @@ class RetrofitClient @Inject constructor(val retrofit: Retrofit) {
     moviesApi = retrofit.create(MoviesApi::class.java)
   }
 
-  fun searchMovies(query: String): Call<MoviesResponse> {
+  suspend fun searchMovies(query: String): MoviesResponse {
     return moviesApi.searchMovie(API_KEY, query)
   }
 
-  fun getMovie(movieId: Int): Call<MovieDetails> {
+  suspend fun getMovie(movieId: Int): MovieDetails {
     return moviesApi.getMovie(movieId, API_KEY)
   }
 

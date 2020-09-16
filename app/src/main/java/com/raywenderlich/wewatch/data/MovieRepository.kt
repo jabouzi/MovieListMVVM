@@ -36,14 +36,14 @@ import com.raywenderlich.wewatch.data.model.details.MovieDetails
 
 interface MovieRepository {
 
-  fun getSavedMovies(): LiveData<List<Movie>>
+  suspend fun getSavedMovies(): LiveData<List<Movie>>
 
-  fun getMovieDetails(movieId: Int): LiveData<MovieDetails?>
+  suspend fun getMovieDetails(movieId: Int): MovieDetails?
 
-  fun saveMovie(movie: Movie)
+  suspend fun saveMovie(movie: Movie)
 
-  fun deleteMovie(movie: Movie)
+  suspend fun deleteMovie(movie: Movie)
 
-  fun searchMovies(query: String): LiveData<List<Movie>?>
+  suspend fun searchMovies(query: String): List<Movie>?
 
 }

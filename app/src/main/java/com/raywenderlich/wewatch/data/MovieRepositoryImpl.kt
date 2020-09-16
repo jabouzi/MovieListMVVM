@@ -56,53 +56,33 @@ class MovieRepositoryImpl @Inject constructor() : MovieRepository {
     retrofitClient = App.INSTANCE.appComponent.getRetrofitClient()
   }
 
-  override fun deleteMovie(movie: Movie) {
+  override suspend fun deleteMovie(movie: Movie) {
     thread {
       App.INSTANCE.db.movieDao().delete(movie.id)
     }
   }
 
-  override fun getSavedMovies() = allMovies
+  override suspend fun getSavedMovies() = allMovies
 
-  override fun getMovieDetails(movieId: Int): LiveData<MovieDetails?> {
-    val data = MutableLiveData<MovieDetails>()
-    retrofitClient.getMovie(movieId).enqueue(object : Callback<MovieDetails> {
-      override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
-        data.value = null
-        Log.d(this.javaClass.simpleName, "Failure")
-      }
+  override suspend fun getMovieDetails(movieId: Int): MovieDetails? {
+      var data = MovieDetails()
+      data = retrofitClient.getMovie(movieId)
 
-      override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
-        Log.d(this.javaClass.simpleName, "Response 1: ${response.body()}")
-        data.value = response.body()
-        Log.d(this.javaClass.simpleName, "Response 2: ${response.body()}")
-      }
-    })
-
-    return data
+      return data
   }
 
-  override fun saveMovie(movie: Movie) {
-    thread {
+  override suspend fun saveMovie(movie: Movie) {
       movieDao.insert(movie)
-    }
   }
 
-  override fun searchMovies(query: String): LiveData<List<Movie>?> {
+  override suspend fun searchMovies(query: String): List<Movie>? {
 
-    val data = MutableLiveData<List<Movie>>()
+    Log.e("query", "$query")
+    Log.e("retrofitClient", "${retrofitClient.retrofit.baseUrl()}")
+    var data = listOf<Movie>()
+    Log.e("SEASRCH", "${retrofitClient.searchMovies(query)}")
+    data = retrofitClient.searchMovies(query).results!!
 
-    retrofitClient.searchMovies(query).enqueue(object : Callback<MoviesResponse> {
-      override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-        data.value = null
-        Log.d(this.javaClass.simpleName, "Failure")
-      }
-
-      override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
-        data.value = response.body()?.results
-        Log.d(this.javaClass.simpleName, "Response: ${response.body()?.results}")
-      }
-    })
     return data
   }
 }

@@ -76,7 +76,7 @@ class SearchMovieFragment : Fragment(), SearchClickListener {
 
     val navController = findNavController()
     val appBarConfiguration = AppBarConfiguration(navController.graph)
-
+    observeMovie()
     view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
             .setupWithNavController(navController, appBarConfiguration)
 
@@ -122,12 +122,16 @@ class SearchMovieFragment : Fragment(), SearchClickListener {
 
   private fun searchMovie() {
     showLoading()
-    viewModel.searchMovie(title).observe(this, Observer { movies ->
+    viewModel.searchMovie(title)
+  }
+
+  private fun observeMovie() {
+    viewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
       hideLoading()
       if (movies == null) {
         showMessage()
       } else {
-          adapter.setMovies(movies)
+        adapter.setMovies(movies)
       }
     })
   }
