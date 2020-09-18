@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,6 +22,7 @@ import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
+import kotlinx.android.synthetic.main.toolbar_view_custom_layout.view.*
 import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
@@ -32,7 +34,7 @@ class MovieDetailsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         App.INSTANCE.appComponent.getMovieDetailsFragmentComponent().inject(this)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[MovieViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
         return inflater.inflate(R.layout.fragment_movie_details, container, false)
     }
 
@@ -44,7 +46,7 @@ class MovieDetailsFragment : Fragment() {
 
         observeMovie()
 
-        view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+        view.findViewById<Toolbar>(R.id.toolbar)
                 .setupWithNavController(navController, appBarConfiguration)
 
         val movieId = arguments?.getInt("movieId")
@@ -58,7 +60,7 @@ class MovieDetailsFragment : Fragment() {
         viewModel.movie.observe(viewLifecycleOwner, Observer { movie ->
             hideLoading()
             movie?.let {
-                toolbar_toolbar_view.title = movie.title
+                toolbar.toolbar_title.text = movie.title
                 showMovieDetails(movie)
             }
         })

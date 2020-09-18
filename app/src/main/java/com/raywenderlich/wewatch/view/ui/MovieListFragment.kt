@@ -6,6 +6,7 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -39,7 +40,7 @@ class MovieListFragment : Fragment(), MovieClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         App.INSTANCE.appComponent.getMovieListFragmentComponent().inject(this)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
@@ -49,10 +50,10 @@ class MovieListFragment : Fragment(), MovieClickListener {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+        view.findViewById<Toolbar>(R.id.toolbar)
                 .setupWithNavController(navController, appBarConfiguration)
 
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         toolbar.inflateMenu(R.menu.main_menu)
         toolbar.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
@@ -61,7 +62,7 @@ class MovieListFragment : Fragment(), MovieClickListener {
         adapter = MovieListAdapter(this)
         moviesRecyclerView.adapter = adapter
         showLoading()
-        viewModel.getSavedMovies().observe(this, Observer { movies ->
+        viewModel.getSavedMovies().observe(viewLifecycleOwner, Observer { movies ->
             hideLoading()
             Log.e("movies", "$movies")
             movies?.let {

@@ -36,6 +36,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -58,7 +59,7 @@ class AddMovieFragment : Fragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     App.INSTANCE.appComponent.getAddMovieFragmentComponent().inject(this)
-    viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddViewModel::class.java)
+    viewModel = ViewModelProvider(this, viewModelFactory).get(AddViewModel::class.java)
     return inflater.inflate(R.layout.fragment_movie_add, container, false)
   }
 
@@ -75,7 +76,7 @@ class AddMovieFragment : Fragment() {
     val navController = findNavController()
     val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-    view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+    view.findViewById<Toolbar>(R.id.toolbar)
             .setupWithNavController(navController, appBarConfiguration)
     addMovieButton.setOnClickListener{
       addMovieClicked(it)

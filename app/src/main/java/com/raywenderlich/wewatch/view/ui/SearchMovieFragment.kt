@@ -37,6 +37,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -52,6 +53,7 @@ import com.raywenderlich.wewatch.viewmodel.SearchViewModel
 import com.raywenderlich.wewatch.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
+import kotlinx.android.synthetic.main.toolbar_view_custom_layout.view.*
 import javax.inject.Inject
 
 class SearchMovieFragment : Fragment(), SearchClickListener {
@@ -67,7 +69,7 @@ class SearchMovieFragment : Fragment(), SearchClickListener {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
     App.INSTANCE.appComponent.getSearchMovieFragmentComponent().inject(this)
-    viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
+    viewModel = ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
     return inflater.inflate(R.layout.fragment_search, container, false)
   }
 
@@ -77,13 +79,13 @@ class SearchMovieFragment : Fragment(), SearchClickListener {
     val navController = findNavController()
     val appBarConfiguration = AppBarConfiguration(navController.graph)
     observeMovie()
-    view.findViewById<Toolbar>(R.id.toolbar_toolbar_view)
+    view.findViewById<Toolbar>(R.id.toolbar)
             .setupWithNavController(navController, appBarConfiguration)
 
     val searchText = arguments?.getString("title")
     searchText?.let {
       title = it
-      toolbar_toolbar_view.title = title
+      toolbar.toolbar_title.text = title
     }
     adapter = SearchListAdapter(this)
     searchRecyclerView.adapter = adapter
